@@ -4,9 +4,9 @@ import { Ionicons } from "@expo/vector-icons";
 import type { RootTabParamList } from "@/types/navigation";
 
 // Screens
-import HomeScreen from "@/screens/HomeScreen";
-import RecordScreen from "@/screens/RecordScreen";
-import ProfileScreen from "@/screens/ProfileScreen";
+import Map from "@/screens/Map";
+import Notifications from "@/screens/Notifications";
+import Profile from "@/screens/Profile";
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
@@ -14,14 +14,14 @@ function AppContainer() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName="Home"
+        initialRouteName="Map"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName: keyof typeof Ionicons.glyphMap = "home";
 
-            if (route.name === "Home") {
+            if (route.name === "Map") {
               iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Record") {
+            } else if (route.name === "Notifications") {
               iconName = focused ? "add" : "add-outline";
             } else if (route.name === "Profile") {
               iconName = focused ? "person" : "person-outline";
@@ -36,18 +36,18 @@ function AppContainer() {
         })}
       >
         <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ tabBarLabel: "ホーム", headerShown: false }}
+          name="Map"
+          component={Map}
+          options={{ tabBarLabel: "マップ", headerShown: false }}
         />
         <Tab.Screen
-          name="Record"
-          component={RecordScreen}
-          options={{ tabBarLabel: "記録", headerShown: false }}
+          name="Notifications"
+          component={Notifications}
+          options={{ tabBarLabel: "通知", headerShown: false }}
         />
         <Tab.Screen
           name="Profile"
-          component={ProfileScreen}
+          component={Profile}
           options={{ tabBarLabel: "プロフィール", headerShown: false }}
         />
       </Tab.Navigator>

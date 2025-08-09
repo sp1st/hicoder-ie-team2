@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text } from "react-native";
 
-export default function RecordScreen() {
+export default function Notifications() {
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 26, fontWeight: "bold" }}>Record Screen</Text>

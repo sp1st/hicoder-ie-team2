@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text } from "react-native";
 
-export default function ProfileScreen() {
+export default function Profile() {
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 26, fontWeight: "bold" }}>Profile Screen</Text>

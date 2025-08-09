@@ -1,5 +1,5 @@
 export type RootTabParamList = {
-  Home: undefined;
+  Map: undefined;
+  Notifications: undefined;
   Profile: undefined;
-  Record: undefined;
 };
