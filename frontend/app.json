@@ -7,8 +7,15 @@
     "scheme": "frontend",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "process.env.GOOGLE_MAPS_API_KEY"
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "このアプリでは、地図上で現在位置を表示するために位置情報を使用します。"
+      }
     },
     "android": {
       "edgeToEdgeEnabled": true,

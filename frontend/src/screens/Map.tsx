@@ -1,7 +1,6 @@
-import { registerRootComponent } from "expo";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import MapView, { LatLng, Region } from "react-native-maps";
+import MapView, { type LatLng, type Region } from "react-native-maps";
 import * as Location from "expo-location";
 import {
   Button,
@@ -20,12 +19,16 @@ import {
 } from "tamagui";
 import { Coffee, GlassWater } from "@tamagui/lucide-icons";
 import MapPin from "@/components/MapPin";
-import { config } from "./tamagui.config";
+import { config } from "../../tamagui.config";
 
 // ---------- Local types ----------
 type MyMarker = { id: number; coord: LatLng; ratio: number };
 const markersData: MyMarker[] = [
-  { id: 1, coord: { latitude: 34.4013448, longitude: 132.4549913 }, ratio: 0.5 },
+  {
+    id: 1,
+    coord: { latitude: 34.4013448, longitude: 132.4549913 },
+    ratio: 0.5,
+  },
 ];
 
 export default function Map() {
@@ -120,7 +123,10 @@ export default function Map() {
                     <XGroup bordered height="$9" width="100%" gap="$2">
                       {/* お茶 */}
                       <RadioGroup.Item asChild value="tea" height={"100%"}>
-                        <Button flex={1} pressStyle={{ bg: "purple", scale: 0.98 }}>
+                        <Button
+                          flex={1}
+                          pressStyle={{ bg: "purple", scale: 0.98 }}
+                        >
                           <Coffee size={18} />
                           <Paragraph ml="$2">お茶</Paragraph>
                         </Button>
@@ -128,7 +134,10 @@ export default function Map() {
 
                       {/* 牛乳 */}
                       <RadioGroup.Item asChild value="milk" height={"100%"}>
-                        <Button flex={1} pressStyle={{ bg: "purple", scale: 0.98 }}>
+                        <Button
+                          flex={1}
+                          pressStyle={{ bg: "purple", scale: 0.98 }}
+                        >
                           <GlassWater size={18} />
                           <Paragraph ml="$2">牛乳</Paragraph>
                         </Button>
@@ -206,5 +215,3 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   map: { width: "100%", height: "100%" },
 });
-
-registerRootComponent(Map);
