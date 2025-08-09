@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Avatar, H2, H4, Stack, TamaguiProvider, Text, View, XStack, YStack } from "tamagui";
+import { Avatar, Button, H2, H4, Stack, TamaguiProvider, Text, View, XStack, YStack } from "tamagui";
 import { config } from "tamagui.config";
 import WaterRecords from "../components/WaterRecords";
 import { API_ENDPOINTS } from "../constants/api";
+import { X } from "@tamagui/lucide-icons";
+import { Linking } from "react-native";
 
 interface UserData {
   X?: string;
@@ -60,9 +62,15 @@ export default function Profile() {
             >
               {loading ? "Loading..." : userData?.user_name || "User Name"}
             </H2>
-            <Stack items={"flex-end"}>
-              <Text>{userData?.X ? `X(Twitter): ${userData.X}` : "X(Twitter)"}</Text>
-            </Stack>
+            {userData?.X && (
+              <Button
+                icon={<X />}
+                onPress={() => {
+                  // React Native or Expo
+                  Linking.openURL(userData.X as string);
+                }}
+              />
+            )}
           </YStack>
         </XStack>
         {userData?.bio && (
@@ -76,3 +84,4 @@ export default function Profile() {
     </TamaguiProvider>
   );
 }
+
