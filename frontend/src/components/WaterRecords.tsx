@@ -98,7 +98,7 @@ export default function WaterRecords({ userId }: WaterRecordsProps) {
   return (
     <ScrollView style={{ borderWidth: 1, borderColor: "$blue3", borderRadius: 12 }} p={20}>
       <H4>過去の記録</H4>
-      <YStack gap={10}>
+      <YStack gap={10} mb={40}>
         {waterRecords.map((record) => (
           <Stack key={record.water_id} bg={getWaterTypeBackground(record.water_type)} p="$4">
             <XStack items="center" gap="$2">
