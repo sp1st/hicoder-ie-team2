@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import type { RootTabParamList } from "@/types/navigation";
+import type { RootTabParamList } from "@/types/Navigation";
 
 // Screens
 import Map from "@/screens/Map";
