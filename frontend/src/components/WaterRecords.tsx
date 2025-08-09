@@ -1,44 +1,26 @@
 import { Coffee, Droplets, Milk } from "@tamagui/lucide-icons";
 import { useEffect, useState } from "react";
 import { H4, ScrollView, Stack, Text, XStack, YStack } from "tamagui";
-import { API_ENDPOINTS } from "../constants/api";
+import { api, API_ENDPOINTS, WaterRecord, type UserId } from "../constants/api";
 
-interface WaterRecord {
-  comment: string;
-  lat: number;
-  lon: number;
-  user_id: number;
-  water_amount: number;
-  water_date: string;
-  water_id: number;
-  water_type: string;
-}
-
-interface WaterRecordsProps {
-  userId: string;
-}
-
-export default function WaterRecords({ userId }: WaterRecordsProps) {
+export default function WaterRecords({ user_id }: { user_id: UserId }) {
   const [waterRecords, setWaterRecords] = useState<WaterRecord[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const getWaterRecords = (userId: string) => {
-    return fetch(API_ENDPOINTS.WATER_RECORDS(userId))
-      .then((response) => response.json())
-      .catch((error) => {
-        console.error("Error fetching water records:", error);
-        return [];
-      });
-  };
+  
 
   useEffect(() => {
-    getWaterRecords(userId).then((data) => {
-      if (data && Array.isArray(data)) {
-        setWaterRecords(data);
+    const fetchWaterRecords = async (userId: UserId) => {
+      try {
+        const response = await api.get<WaterRecord[]>(API_ENDPOINTS.WATER_RECORDS(userId));
+        setWaterRecords(response);
+      } catch (error) {
+        console.error("Error fetching water records:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    });
-  }, [userId]);
+    };
+    fetchWaterRecords(user_id);
+  }, [user_id]);
 
   const getWaterTypeIcon = (waterType: string) => {
     switch (waterType) {
@@ -108,7 +90,7 @@ export default function WaterRecords({ userId }: WaterRecordsProps) {
               </Text>
             </XStack>
             <Text fontSize={16}>{record.water_amount}ml</Text>
-            <Text fontSize={14}>{formatDate(record.water_date)}</Text>
+            <Text fontSize={14}>{formatDate(record.water_date.toString())}</Text>
             {record.comment && (
               <Text fontSize={14} mt="$1">
                 {record.comment}

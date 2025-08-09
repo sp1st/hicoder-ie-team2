@@ -3,19 +3,36 @@ const API_BASE_URL =
 
 export const API_ENDPOINTS = {
   BASE_URL: API_BASE_URL,
-  USER_INFO: (userId: string) => `${API_BASE_URL}/users/${userId}`,
-  WATER_RECORDS: (userId: string) => `${API_BASE_URL}/water_records/${userId}`,
+  // GET
+  USER_INFO: (userId: UserId) => `${API_BASE_URL}/users/${userId}`,
+  NEAR_USERS_INFO: () => `${API_BASE_URL}/users/nearby`,
+  WATER_RECORDS: (userId: UserId) => `${API_BASE_URL}/water_records/${userId}`,
+  WATER_RECORDS_TODAY: (userId: UserId) => `${API_BASE_URL}/water_records/today/${userId}`,
+  WATER_RECORDS_LATEST: (userId: UserId) => `${API_BASE_URL}/water_records/now/${userId}`,
+  STAMPS: () => `${API_BASE_URL}/stamps`,
+  STAMP_INFO: (stampId: StampId) => `${API_BASE_URL}/stamps/${stampId}`,
+  STAMPS_SENT_INFO: (userId: UserId) => `${API_BASE_URL}/stamps/send/${userId}`,
+  // POST
+  CREATE_USER: () => `${API_BASE_URL}/users`,
+  CREATE_WATER_RECORD: (userId: UserId) => `${API_BASE_URL}/water_records/${userId}`,
+  SEND_STAMP: (sender_id: UserId, receiver_id: UserId, stamp_id: StampId) => `${API_BASE_URL}/stamps/send`,
+  // PUT
+  UPDATE_USER_INFO: (userId: UserId) => `${API_BASE_URL}/users/${userId}`,
+  UPDATE_WATER_RECORD: (waterId: number) => `${API_BASE_URL}/water_records/${waterId}`,
+  RESPOND_STAMP: (userStampId: number) => `${API_BASE_URL}/stamps/apply/${userStampId}`
 };
-type UserId = number;
+
+export type UserId = number;
+export type StampId = number;
 export type User = {
   user_id: UserId,
   user_name: string,
-  bio: string,
-  X: string,
-  photo_url: string,
+  bio: string | "null",
+  X: string | "null",
+  photo_url: string | "null",
   password_hash: string,
 }
-export type water_record = {
+export type WaterRecord = {
   water_id: number,
   water_date: Date,
   water_type: string,
@@ -25,37 +42,119 @@ export type water_record = {
   comment: string,
   user_id: UserId
 }
-export type user_stamp = {
+export type UserStamp = {
   user_stamp_id: number,
   after_stamp: boolean,
   recieve_id: UserId,
   sender_id: UserId,
-  stamp_id: number,
+  stamp_id: number | "null",
   created_at: Date,
   updated_at: Date
 }
-export type stamp = {
+export type Stamp = {
   stamp_id: number,
   message: string,
   image_url: string
 }
 
-export const getUserData: (userId: string) => Promise<User | null> = (userId: string) => {
-  return fetch(API_ENDPOINTS.USER_INFO(userId))
-    .then((response) => response.json())
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-      return null;
-    });
+// --- Error shape ---
+export class ApiError extends Error {
+  status?: number;
+  body?: unknown;
+  constructor(message: string, status?: number, body?: unknown) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.body = body;
+  }
+}
+
+// --- Minimal runtime checking (optional) ---
+// You can pass a user-provided guard like: (x: unknown): x is User => ...
+export type TypeGuard<T> = (x: unknown) => x is T;
+
+// --- Core request helper ---
+type RequestOptions = {
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  headers?: Record<string, string>;
+  body?: unknown;
+  signal?: AbortSignal;
+  timeoutMs?: number; // optional per-call timeout
+  guard?: TypeGuard<any>; // optional runtime guard
 };
 
-// fetch
-// useEffect(() => {
-//   const userId = "2"; // Replace with actual user ID
-//   getUserData(userId).then((data) => {
-//     if (data) {
-//       setUserData(data);
-//     }
-//     setLoading(false);
-//   });
-// }, []);
+async function request<T>(
+  url: string,
+  {
+    method = "GET",
+    headers,
+    body,
+    signal,
+    timeoutMs,
+    guard
+  }: RequestOptions = {}
+): Promise<T> {
+  const controller = new AbortController();
+  const abortSignal = signal ?? controller.signal;
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    if (timeoutMs && timeoutMs > 0) {
+      timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    }
+
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(headers ?? {})
+      },
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+      signal: abortSignal
+    });
+
+    // Non-2xx => throw
+    if (!res.ok) {
+      let errBody: unknown = undefined;
+      try {
+        errBody = await res.json();
+      } catch {
+        // ignore parse error
+      }
+      throw new ApiError(`HTTP ${res.status} for ${method} ${url}`, res.status, errBody);
+    }
+
+    // Try parse JSON; allow empty
+    const text = await res.text();
+    const data = (text ? JSON.parse(text) : null) as unknown;
+
+    // Optional guard
+    if (guard && !guard(data)) {
+      throw new ApiError(`Response validation failed for ${method} ${url}`, res.status, data);
+    }
+
+    return data as T;
+  } catch (e: any) {
+    if (e?.name === "AbortError") {
+      throw new ApiError(`Request aborted (timeout or manual): ${method} ${url}`);
+    }
+    if (e instanceof ApiError) throw e;
+    throw new ApiError(`Network/Unknown error: ${e?.message ?? String(e)}`);
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
+}
+
+// --- Thin convenience layer ---
+export const api = {
+  get: <T>(url: string, opts?: Omit<RequestOptions, "method" | "body">) =>
+    request<T>(url, { ...opts, method: "GET" }),
+  post: <T>(url: string, body?: unknown, opts?: Omit<RequestOptions, "method">) =>
+    request<T>(url, { ...opts, method: "POST", body }),
+  put: <T>(url: string, body?: unknown, opts?: Omit<RequestOptions, "method">) =>
+    request<T>(url, { ...opts, method: "PUT", body }),
+  patch: <T>(url: string, body?: unknown, opts?: Omit<RequestOptions, "method">) =>
+    request<T>(url, { ...opts, method: "PATCH", body }),
+  delete: <T>(url: string, opts?: Omit<RequestOptions, "method" | "body">) =>
+    request<T>(url, { ...opts, method: "DELETE" })
+};
