@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import MapView, { LatLng, Region } from "react-native-maps";
+import MapView, { type LatLng, type Region } from "react-native-maps";
 import * as Location from "expo-location";
 import {
   Button,
