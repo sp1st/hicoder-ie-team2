@@ -7,7 +7,7 @@ const tsParser = require("@typescript-eslint/parser");
 
 module.exports = defineConfig([
   expoConfig,
-  eslintPluginPrettierRecommended,
+  // eslintPluginPrettierRecommended,
   {
     ignores: ["dist/*", "babel.config.js"],
   },
