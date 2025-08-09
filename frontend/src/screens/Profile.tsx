@@ -1,7 +1,7 @@
-import { Coffee, Milk } from "@tamagui/lucide-icons";
 import { useEffect, useState } from "react";
 import { Avatar, H2, H4, Stack, TamaguiProvider, Text, View, XStack, YStack } from "tamagui";
 import { config } from "tamagui.config";
+import WaterRecords from "../components/WaterRecords";
 import { API_ENDPOINTS } from "../constants/api";
 
 interface UserData {
@@ -71,38 +71,8 @@ export default function Profile() {
             <Text>{userData.bio}</Text>
           </Stack>
         )}
-        <Stack style={{ borderWidth: 1, borderColor: "$blue3", borderRadius: 12 }} p={20}>
-          <H4>過去の記録</H4>
-          <YStack gap={5}>
-            <Stack bg="$green5" p="$4">
-              <XStack>
-                <Coffee size={24} color="$green9" />
-                <Text fontSize={24} p={4}>
-                  お茶
-                </Text>
-              </XStack>
-              <Text>500ml</Text>
-              <Text>2023年3月1日</Text>
-            </Stack>
-            <Stack bg="$white3" p="$4">
-              <XStack>
-                <Milk size={24} color="$white9" />
-                <Text fontSize={24} p={4}>
-                  牛乳
-                </Text>
-              </XStack>
-              <Text>200ml</Text>
-              <Text>2023年3月1日</Text>
-            </Stack>
-          </YStack>
-        </Stack>
+        <WaterRecords userId="2" />
       </View>
     </TamaguiProvider>
   );
 }
-
-// user name
-// bio
-// X link
-// photo url
-
