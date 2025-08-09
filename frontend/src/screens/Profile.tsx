@@ -1,40 +1,51 @@
-import { Coffee, Milk, X } from "@tamagui/lucide-icons";
-import {
-  Avatar,
-  H2,
-  H4,
-  Stack,
-  TamaguiProvider,
-  Text,
-  View,
-  XStack,
-  YStack,
-} from "tamagui";
+import { Coffee, Milk } from "@tamagui/lucide-icons";
+import { useEffect, useState } from "react";
+import { Avatar, H2, H4, Stack, TamaguiProvider, Text, View, XStack, YStack } from "tamagui";
 import { config } from "tamagui.config";
+import { API_ENDPOINTS } from "../constants/api";
+
+interface UserData {
+  X?: string;
+  bio?: string;
+  photo_url?: string;
+  user_id: string;
+  user_name: string;
+}
 
 export default function Profile() {
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const getUserData = (userId: string) => {
+    return fetch(API_ENDPOINTS.USERS(userId))
+      .then((response) => response.json())
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+        return null;
+      });
+  };
+
+  useEffect(() => {
+    const userId = "2"; // Replace with actual user ID
+    getUserData(userId).then((data) => {
+      if (data) {
+        setUserData(data);
+      }
+      setLoading(false);
+    });
+  }, []);
+
   return (
     <TamaguiProvider config={config}>
       <View flex={1} p={40} pt={60}>
-        <XStack
-          mb={20}
-          gap={20}
-          bg={"$blue3"}
-          borderWidth={1}
-          style={{ borderRadius: 12 }}
-        >
+        <XStack mb={20} gap={20} bg={"$blue3"} borderWidth={1} style={{ borderRadius: 12 }}>
           <Avatar size={150} bg={"$blue3"} circular>
             <Avatar.Image
               source={{
-                uri: "https://example.com/path/to/profile-image.jpg",
+                uri: userData?.photo_url || "https://example.com/path/to/profile-image.jpg",
               }}
             />
-            <Avatar.Fallback
-              delayMs={500}
-              height={150}
-              justify={"center"}
-              items="center"
-            >
+            <Avatar.Fallback delayMs={500} height={150} justify={"center"} items="center">
               <Text>Loading...</Text>
             </Avatar.Fallback>
           </Avatar>
@@ -47,17 +58,20 @@ export default function Profile() {
                 fontWeight: "bold",
               }}
             >
-              User Name
+              {loading ? "Loading..." : userData?.user_name || "User Name"}
             </H2>
             <Stack items={"flex-end"}>
-              <Text>X(Twitter)</Text>
+              <Text>{userData?.X ? `X(Twitter): ${userData.X}` : "X(Twitter)"}</Text>
             </Stack>
           </YStack>
         </XStack>
-        <Stack
-          style={{ borderWidth: 1, borderColor: "$blue3", borderRadius: 12 }}
-          p={20}
-        >
+        {userData?.bio && (
+          <Stack style={{ borderWidth: 1, borderColor: "$blue3", borderRadius: 12 }} p={20} mb={20}>
+            <H4>Bio</H4>
+            <Text>{userData.bio}</Text>
+          </Stack>
+        )}
+        <Stack style={{ borderWidth: 1, borderColor: "$blue3", borderRadius: 12 }} p={20}>
           <H4>過去の記録</H4>
           <YStack gap={5}>
             <Stack bg="$green5" p="$4">
@@ -91,3 +105,4 @@ export default function Profile() {
 // bio
 // X link
 // photo url
+
