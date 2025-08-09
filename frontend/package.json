@@ -23,6 +23,7 @@
     "@tamagui/config": "^1.132.16",
     "@tamagui/lucide-icons": "^1.132.16",
     "@tamagui/portal": "^1.132.16",
+    "dayjs": "^1.11.13",
     "expo": "~53.0.20",
     "expo-blur": "~14.1.5",
     "expo-constants": "~17.1.7",
