@@ -1,40 +1,28 @@
 import { useEffect, useState } from "react";
-import { Avatar, Button, H2, H4, Stack, TamaguiProvider, Text, View, XStack, YStack } from "tamagui";
+import {
+  Avatar,
+  Button,
+  H2,
+  H4,
+  Stack,
+  TamaguiProvider,
+  Text,
+  View,
+  XStack,
+  YStack,
+} from "tamagui";
 import { config } from "tamagui.config";
 import WaterRecords from "../components/WaterRecords";
-import { API_ENDPOINTS } from "../constants/api";
+import { getUserInfo, type User } from "../constants/api";
 import { X } from "@tamagui/lucide-icons";
 import { Linking } from "react-native";
 
-interface UserData {
-  X?: string;
-  bio?: string;
-  photo_url?: string;
-  user_id: string;
-  user_name: string;
-}
-
 export default function Profile() {
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const getUserData = (userId: string) => {
-    return fetch(API_ENDPOINTS.USERS(userId))
-      .then((response) => response.json())
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-        return null;
-      });
-  };
-
   useEffect(() => {
-    const userId = "2"; // Replace with actual user ID
-    getUserData(userId).then((data) => {
-      if (data) {
-        setUserData(data);
-      }
-      setLoading(false);
-    });
+    getUserInfo(2).then(setUserData);
   }, []);
 
   return (
@@ -79,9 +67,8 @@ export default function Profile() {
             <Text>{userData.bio}</Text>
           </Stack>
         )}
-        <WaterRecords userId="2" />
+        {userData?.user_id && <WaterRecords user_id={userData.user_id} />}
       </View>
     </TamaguiProvider>
   );
 }
-
