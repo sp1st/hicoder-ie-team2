@@ -1,25 +1,14 @@
 import { Coffee, Droplets, Milk } from "@tamagui/lucide-icons";
 import { useEffect, useState } from "react";
 import { H4, ScrollView, Stack, Text, XStack, YStack } from "tamagui";
-import { api, API_ENDPOINTS, WaterRecord, type UserId } from "../constants/api";
+import { getWaterRecords, type WaterRecord, type UserId } from "../constants/api";
 
 export default function WaterRecords({ user_id }: { user_id: UserId }) {
   const [waterRecords, setWaterRecords] = useState<WaterRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  
 
   useEffect(() => {
-    const fetchWaterRecords = async (userId: UserId) => {
-      try {
-        const response = await api.get<WaterRecord[]>(API_ENDPOINTS.WATER_RECORDS(userId));
-        setWaterRecords(response);
-      } catch (error) {
-        console.error("Error fetching water records:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchWaterRecords(user_id);
+    getWaterRecords(user_id).then(setWaterRecords);
   }, [user_id]);
 
   const getWaterTypeIcon = (waterType: string) => {

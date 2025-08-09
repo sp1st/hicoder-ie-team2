@@ -13,7 +13,7 @@ import {
 } from "tamagui";
 import { config } from "tamagui.config";
 import WaterRecords from "../components/WaterRecords";
-import { api, API_ENDPOINTS, type User } from "../constants/api";
+import { getUserInfo, type User } from "../constants/api";
 import { X } from "@tamagui/lucide-icons";
 import { Linking } from "react-native";
 
@@ -22,17 +22,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userId = 2; // TODO: Replace with actual user ID
-        const user: User = await api.get(API_ENDPOINTS.USER_INFO(userId));
-        setUserData(user);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUser();
+    getUserInfo(2).then(setUserData);
   }, []);
 
   return (
@@ -77,9 +67,7 @@ export default function Profile() {
             <Text>{userData.bio}</Text>
           </Stack>
         )}
-        {userData?.user_id && (
-          <WaterRecords user_id={userData.user_id} />
-        )}
+        {userData?.user_id && <WaterRecords user_id={userData.user_id} />}
       </View>
     </TamaguiProvider>
   );

@@ -158,3 +158,56 @@ export const api = {
   delete: <T>(url: string, opts?: Omit<RequestOptions, "method" | "body">) =>
     request<T>(url, { ...opts, method: "DELETE" })
 };
+
+// USER_INFO: (userId: UserId) => `${API_BASE_URL}/users/${userId}`,
+const getUserInfo = async (userId: UserId): Promise<User> => {
+  return await api.get<User>(API_ENDPOINTS.USER_INFO(userId));
+};
+// NEAR_USERS_INFO: () => `${API_BASE_URL}/users/nearby`,
+// WATER_RECORDS: (userId: UserId) => `${API_BASE_URL}/water_records/${userId}`,
+const getWaterRecords = async (userId: UserId): Promise<WaterRecord[]> => {
+  return await api.get<WaterRecord[]>(API_ENDPOINTS.WATER_RECORDS(userId));
+};
+// WATER_RECORDS_TODAY: (userId: UserId) => `${API_BASE_URL}/water_records/today/${userId}`,
+const getTodayWaterRecords = async (userId: UserId): Promise<WaterRecord[]> => {
+  return await api.get<WaterRecord[]>(API_ENDPOINTS.WATER_RECORDS_TODAY(userId));
+};
+// WATER_RECORDS_LATEST: (userId: UserId) => `${API_BASE_URL}/water_records/now/${userId}`,
+const getLatestWaterRecords = async (userId: UserId): Promise<WaterRecord[]> => {
+  return await api.get<WaterRecord[]>(API_ENDPOINTS.WATER_RECORDS_LATEST(userId));
+};
+// STAMPS: () => `${API_BASE_URL}/stamps`,
+const getStamps = async (): Promise<Stamp[]> => {
+  return await api.get<Stamp[]>(API_ENDPOINTS.STAMPS());
+};
+// STAMP_INFO: (stampId: StampId) => `${API_BASE_URL}/stamps/${stampId}`,
+const getStampInfo = async (stampId: StampId): Promise<Stamp> => {
+  return await api.get<Stamp>(API_ENDPOINTS.STAMP_INFO(stampId));
+};
+// STAMPS_SENT_INFO: (userId: UserId) => `${API_BASE_URL}/stamps/send/${userId}`,
+const getStampsSentInfo = async (userId: UserId): Promise<UserStamp[]> => {
+  return await api.get<UserStamp[]>(API_ENDPOINTS.STAMPS_SENT_INFO(userId));
+};
+// // POST
+// CREATE_USER: () => `${API_BASE_URL}/users`,
+const createUser = async (user: User): Promise<User> => {
+  return await api.post<User>(API_ENDPOINTS.CREATE_USER(), user);
+};
+// CREATE_WATER_RECORD: (userId: UserId) => `${API_BASE_URL}/water_records/${userId}`,
+const createWaterRecord = async (userId: UserId, record: WaterRecord): Promise<WaterRecord> => {
+  return await api.post<WaterRecord>(API_ENDPOINTS.CREATE_WATER_RECORD(userId), record);
+};
+// SEND_STAMP: (sender_id: UserId, receiver_id: UserId, stamp_id: StampId) => `${API_BASE_URL}/stamps/send`,
+// // PUT
+// UPDATE_USER_INFO: (userId: UserId) => `${API_BASE_URL}/users/${userId}`,
+const updateUserInfo = async (userId: UserId, user: User): Promise<User> => {
+  return await api.put<User>(API_ENDPOINTS.UPDATE_USER_INFO(userId), user);
+};
+// UPDATE_WATER_RECORD: (waterId: number) => `${API_BASE_URL}/water_records/${waterId}`,
+const updateWaterRecord = async (waterId: number, record: WaterRecord): Promise<WaterRecord> => {
+  return await api.put<WaterRecord>(API_ENDPOINTS.UPDATE_WATER_RECORD(waterId), record);
+};
+// RESPOND_STAMP: (userStampId: number) => `${API_BASE_URL}/stamps/apply/${userStampId}`
+export {
+  getUserInfo, getWaterRecords, getTodayWaterRecords, getLatestWaterRecords, createUser, createWaterRecord, updateUserInfo, updateWaterRecord, getStamps, getStampInfo, getStampsSentInfo
+};
