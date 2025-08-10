@@ -1,8 +1,10 @@
 import { pinStyle } from "@/style/Pin";
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { Marker } from "react-native-maps";
 import TruncateMessage from "./TruncateMessage";
 import type { MarkerData } from "@/types/Marker";
+import WaterLevelIcon from "./WaterLevelIcon";
+import TimeProgress from "@/hooks/useTimeProgress";
 
 type MapPinProps = {
   pins: MarkerData[];
@@ -13,6 +15,7 @@ const MapPin = ({ pins, setSelectedPin }: MapPinProps) => {
   return (
     <>
       {pins.map((pin) => {
+        const { progress } = TimeProgress(pin.water_date);
         const iconSource = pin.iconUrl
           ? { uri: pin.iconUrl }
           : require("../assets/images/no-profile.png");
@@ -36,9 +39,7 @@ const MapPin = ({ pins, setSelectedPin }: MapPinProps) => {
                 <View style={pinStyle.arrow} />
               </View>
               <View style={pinStyle.markerContainer}>
-                <View style={pinStyle.iconContainer}>
-                  <Image source={iconSource} style={pinStyle.markerImage} />
-                </View>
+                <WaterLevelIcon iconSource={iconSource} progress={progress} />
               </View>
             </View>
           </Marker>

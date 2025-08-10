@@ -14,8 +14,8 @@ type MockupProps = {
 
 const Mockup = ({ selectedPin, setSelectedPin }: MockupProps) => {
   dayjs.locale(ja);
-  const formattedDate = dayjs(selectedPin.water_datetime).format(
-    "M月D日（ddd）HH:mm",
+  const formattedDate = dayjs(selectedPin.water_date).format(
+    "M月D日（ddd）HH:mm"
   );
   return (
     <View style={mockupStyle.mockupBox}>
