@@ -2,8 +2,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import type { RootTabParamList } from "@/types/Navigation";
+import { useState } from "react";
 
 // Screens
+import Home from "@/screens/Home";
 import Map from "@/screens/Map";
 import Notifications from "@/screens/Notifications";
 import Profile from "@/screens/Profile";
@@ -11,6 +13,18 @@ import Profile from "@/screens/Profile";
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
 function AppContainer() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  // ログインしていない場合はログイン画面を表示
+  if (!isLoggedIn) {
+    return <Home onLogin={handleLogin} />;
+  }
+
+  // ログイン済みの場合はメインアプリを表示
   return (
     <NavigationContainer>
       <Tab.Navigator
