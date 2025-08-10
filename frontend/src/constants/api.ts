@@ -19,10 +19,14 @@ export const API_ENDPOINTS = {
   BASE_URL: API_BASE_URL,
 
   // GET Endpoints
+  /** Get all users */
+  USERS: () => `${API_BASE_URL}/users`,
   /** Get user information by ID */
   USER_INFO: (userId: UserId) => `${API_BASE_URL}/users/${userId}`,
   /** Get nearby users information */
   NEAR_USERS_INFO: (userId: UserId) => `${API_BASE_URL}/users/nearby/${userId}`,
+  /** Get all water records */
+  WATER_RECORDS_ALL: () => `${API_BASE_URL}/water_records`,
   /** Get all water records for a user */
   WATER_RECORDS: (userId: UserId) => `${API_BASE_URL}/water_records/${userId}`,
   /** Get today's water records for a user */
@@ -320,12 +324,21 @@ export const api = {
 };
 
 /**
+ * Retrieves all users
+ * @returns Promise resolving to array of user data
+ */
+
+const getUsers = async (): Promise<User[]> => {
+  return await api.get<User[]>(API_ENDPOINTS.USERS());
+};
+
+/**
  * Retrieves user information by user ID
  * @param userId - The ID of the user to retrieve
  * @returns Promise resolving to user data
  */
-const getUserInfo = async (userId: UserId): Promise<User> => {
-  return await api.get<User>(API_ENDPOINTS.USER_INFO(userId));
+const getUserInfo = async (userId: UserId): Promise<User[]> => {
+  return await api.get<User[]>(API_ENDPOINTS.USER_INFO(userId));
 };
 
 /**
@@ -335,6 +348,15 @@ const getUserInfo = async (userId: UserId): Promise<User> => {
  */
 const getNearUsersInfo = async (userId: UserId): Promise<NearUser[]> => {
   return await api.get<NearUser[]>(API_ENDPOINTS.NEAR_USERS_INFO(userId));
+};
+
+/**
+ * Retrieves all water consumption records
+ * @returns Promise resolving to array of water records
+ */
+
+const getAllWaterRecords = async (): Promise<WaterRecord[]> => {
+  return await api.get<WaterRecord[]>(API_ENDPOINTS.WATER_RECORDS_ALL());
 };
 
 /**
@@ -437,5 +459,5 @@ export {
   createUser,
   createWaterRecord, getLatestWaterRecords, getStampInfo, getStamps, getStampsSentInfo, getTodayWaterRecords, getUserInfo,
   getWaterRecords, updateUserInfo,
-  updateWaterRecord, getNearUsersInfo
+  updateWaterRecord, getNearUsersInfo, getAllWaterRecords, getUsers
 };

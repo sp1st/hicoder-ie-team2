@@ -21,7 +21,7 @@ import type { MarkerData } from "@/types/Marker";
 import Mockup from "@/components/Mockup";
 import MapPin from "@/components/MapPin";
 import { markerDataSample } from "@/components/PinData";
-import { useUserStore } from "@/store/userStore";
+import { useUserStore } from "../store/userStore";
 import { getNearUsersInfo } from "@/constants/api";
 
 export default function Map() {
