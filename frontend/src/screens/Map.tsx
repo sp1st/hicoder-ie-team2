@@ -20,8 +20,8 @@ import { Coffee, GlassWater } from "@tamagui/lucide-icons";
 import type { MarkerData } from "@/types/Marker";
 import Mockup from "@/components/Mockup";
 import MapPin from "@/components/MapPin";
-// import usePin from "@/hooks/usePin";
-import { markerData } from "@/components/PinData";
+import usePin from "@/hooks/usePin";
+// import { markerData } from "@/components/PinData";
 
 export default function Map() {
   const [initRegion, setInitRegion] = useState<Region | null>(null);
@@ -35,7 +35,7 @@ export default function Map() {
   const [amount, setAmount] = useState<number>(500);
   const [comment, setComment] = useState<string>("");
 
-  // const { markerData } = usePin();
+  const { markerData } = usePin();
 
   useEffect(() => {
     const init = async () => {
