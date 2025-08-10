@@ -9,14 +9,18 @@ import Home from "@/screens/Home";
 import Map from "@/screens/Map";
 import Notifications from "@/screens/Notifications";
 import Profile from "@/screens/Profile";
+import { useUserStore } from "@/store/userStore";
+import { type UserId } from "@/constants/api";
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
 function AppContainer() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const setUserId = useUserStore((state) => state.setUserId);
 
-  const handleLogin = () => {
+  const handleLogin = (userId: UserId) => {
     setIsLoggedIn(true);
+    setUserId(userId);
   };
 
   // ログインしていない場合はログイン画面を表示

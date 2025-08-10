@@ -22,7 +22,7 @@ export const API_ENDPOINTS = {
   /** Get user information by ID */
   USER_INFO: (userId: UserId) => `${API_BASE_URL}/users/${userId}`,
   /** Get nearby users information */
-  NEAR_USERS_INFO: () => `${API_BASE_URL}/users/nearby`,
+  NEAR_USERS_INFO: (userId: UserId) => `${API_BASE_URL}/users/nearby/${userId}`,
   /** Get all water records for a user */
   WATER_RECORDS: (userId: UserId) => `${API_BASE_URL}/water_records/${userId}`,
   /** Get today's water records for a user */
@@ -68,15 +68,26 @@ export type User = {
   /** Display name of the user */
   user_name: string,
   /** User biography or description */
-  bio: string | "null",
+  bio?: string,
   /** X (Twitter) handle */
-  X: string | "null",
+  X?: string,
   /** URL to user's profile photo */
-  photo_url: string | "null",
+  photo_url?: string,
   /** Hashed password for authentication */
   password_hash: string,
 }
 
+/**
+ * Near user entity representing a user in close proximity
+ */
+export type NearUser = {
+  /** Unique user identifier */
+  user_id: UserId,
+  /** Latitude coordinate of the user */
+  lat: number,
+  /** Longitude coordinate of the user */
+  lon: number
+}
 /**
  * Water consumption record
  */
@@ -112,7 +123,7 @@ export type UserStamp = {
   /** ID of the user sending the stamp */
   sender_id: UserId,
   /** ID of the stamp being sent */
-  stamp_id: number | "null",
+  stamp_id?: number,
   /** Timestamp when the record was created */
   created_at: Date,
   /** Timestamp when the record was last updated */
@@ -318,6 +329,15 @@ const getUserInfo = async (userId: UserId): Promise<User> => {
 };
 
 /**
+ * Retrieves information about nearby users
+ * @param userId - The ID of the user to retrieve nearby users for
+ * @returns Promise resolving to array of nearby user data
+ */
+const getNearUsersInfo = async (userId: UserId): Promise<NearUser[]> => {
+  return await api.get<NearUser[]>(API_ENDPOINTS.NEAR_USERS_INFO(userId));
+};
+
+/**
  * Retrieves all water consumption records for a specific user
  * @param userId - The ID of the user whose records to retrieve
  * @returns Promise resolving to array of water records
@@ -417,5 +437,5 @@ export {
   createUser,
   createWaterRecord, getLatestWaterRecords, getStampInfo, getStamps, getStampsSentInfo, getTodayWaterRecords, getUserInfo,
   getWaterRecords, updateUserInfo,
-  updateWaterRecord
+  updateWaterRecord, getNearUsersInfo
 };
