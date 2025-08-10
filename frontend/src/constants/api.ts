@@ -112,7 +112,7 @@ export type UserStamp = {
   /** ID of the user sending the stamp */
   sender_id: UserId,
   /** ID of the stamp being sent */
-  stamp_id: number | "null",
+  stamp_id: number,
   /** Timestamp when the record was created */
   created_at: Date,
   /** Timestamp when the record was last updated */
