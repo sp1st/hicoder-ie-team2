@@ -159,3 +159,25 @@ def update_water_record(water_id):
         'comment': record.comment,
         'user_id': record.user_id
     })
+
+# GET /api/v1/water_records
+@water_records_bp.route('/', methods=['GET'])
+def get_all_water_records():
+
+    records = WaterRecord.query.all()
+    if not records:
+        return jsonify({'message': 'No water records found'}), 404
+    
+    records_list = []
+    for record in records:
+        records_list.append({
+            'water_id': record.water_id,
+            'water_date': record.water_date.isoformat(),
+            'water_type': record.water_type,
+            'water_amount': record.water_amount,
+            'lat': record.lat,
+            'lon': record.lon,
+            'comment': record.comment,
+            'user_id': record.user_id
+        })
+    return jsonify(records_list)
