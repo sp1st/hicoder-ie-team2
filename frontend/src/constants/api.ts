@@ -78,6 +78,17 @@ export type User = {
 }
 
 /**
+ * Near user entity representing a user in close proximity
+ */
+export type NearUser = {
+  /** Unique user identifier */
+  user_id: UserId,
+  /** Latitude coordinate of the user */
+  lat: number,
+  /** Longitude coordinate of the user */
+  lon: number
+}
+/**
  * Water consumption record
  */
 export type WaterRecord = {
@@ -322,8 +333,8 @@ const getUserInfo = async (userId: UserId): Promise<User> => {
  * @param userId - The ID of the user to retrieve nearby users for
  * @returns Promise resolving to array of nearby user data
  */
-const getNearUsersInfo = async (userId: UserId): Promise<User[]> => {
-  return await api.get<User[]>(API_ENDPOINTS.NEAR_USERS_INFO(userId));
+const getNearUsersInfo = async (userId: UserId): Promise<NearUser[]> => {
+  return await api.get<NearUser[]>(API_ENDPOINTS.NEAR_USERS_INFO(userId));
 };
 
 /**
