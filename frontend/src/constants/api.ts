@@ -68,11 +68,11 @@ export type User = {
   /** Display name of the user */
   user_name: string,
   /** User biography or description */
-  bio: string | "null",
+  bio?: string,
   /** X (Twitter) handle */
-  X: string | "null",
+  X?: string,
   /** URL to user's profile photo */
-  photo_url: string | "null",
+  photo_url?: string,
   /** Hashed password for authentication */
   password_hash: string,
 }
@@ -112,7 +112,7 @@ export type UserStamp = {
   /** ID of the user sending the stamp */
   sender_id: UserId,
   /** ID of the stamp being sent */
-  stamp_id: number | "null",
+  stamp_id?: number,
   /** Timestamp when the record was created */
   created_at: Date,
   /** Timestamp when the record was last updated */
