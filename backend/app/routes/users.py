@@ -89,3 +89,20 @@ def get_nearby_users(user_id):
     records.append(info_data)
 
   return jsonify(records)
+
+@users_bp.route('/', methods=['GET'])
+def get_all_users():
+    users = User.query.all()
+    if not users:
+        return jsonify({'message': 'No users found'}), 404
+
+    users_list = []
+    for user in users:
+        users_list.append({
+            'user_id': user.user_id,
+            'user_name': user.user_name,
+            'bio': user.bio,
+            'X': user.X,
+            'photo_url': user.photo_url
+        })
+    return jsonify(users_list)

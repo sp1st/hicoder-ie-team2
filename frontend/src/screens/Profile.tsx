@@ -16,14 +16,19 @@ import WaterRecords from "../components/WaterRecords";
 import { getUserInfo, type User } from "../constants/api";
 import { X } from "@tamagui/lucide-icons";
 import { Linking } from "react-native";
+import { useUserStore } from "../store/userStore";
 
 export default function Profile() {
   const [userData, setUserData] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const userId = useUserStore((state) => state.userId);
 
   useEffect(() => {
-    getUserInfo(2).then(setUserData);
-  }, []);
+    if (userId) getUserInfo(userId).then((data) => {
+      setUserData(data);
+      setLoading(false);
+    });
+  }, [userId]);
 
   return (
     <TamaguiProvider config={config}>
@@ -55,7 +60,7 @@ export default function Profile() {
                 icon={<X />}
                 onPress={() => {
                   // React Native or Expo
-                  Linking.openURL(userData.X as string);
+                  Linking.openURL(("https://x.com/" + userData.X) as string);
                 }}
               />
             )}

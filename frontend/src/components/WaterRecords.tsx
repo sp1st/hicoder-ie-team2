@@ -8,7 +8,10 @@ export default function WaterRecords({ user_id }: { user_id: UserId }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getWaterRecords(user_id).then(setWaterRecords);
+    getWaterRecords(user_id).then((value) => {
+      setWaterRecords(value);
+      setLoading(false);
+    });
   }, [user_id]);
 
   const getWaterTypeIcon = (waterType: string) => {

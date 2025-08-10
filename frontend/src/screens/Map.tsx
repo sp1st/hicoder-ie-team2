@@ -21,6 +21,8 @@ import type { MarkerData } from "@/types/Marker";
 import Mockup from "@/components/Mockup";
 import MapPin from "@/components/MapPin";
 import { markerDataSample } from "@/components/PinData";
+import { useUserStore } from "@/store/userStore";
+import { getNearUsersInfo } from "@/constants/api";
 
 export default function Map() {
   const [initRegion, setInitRegion] = useState<Region | null>(null);
@@ -33,6 +35,8 @@ export default function Map() {
   const [drinkType, setDrinkType] = useState<string | null>(null);
   const [amount, setAmount] = useState<number>(500);
   const [comment, setComment] = useState<string>("");
+
+  const userId = useUserStore((state) => state.userId);
 
   useEffect(() => {
     const init = async () => {
@@ -50,8 +54,21 @@ export default function Map() {
       });
     };
     init();
-    setPins(markerDataSample);
-  }, []);
+    if (userId)
+      getNearUsersInfo(userId).then((data) => {
+        const pinData: MarkerData[] = data.map((e, index) => ({
+          id: index,
+          user_id: e.user_id,
+          user_name: "Unknown", // TODO: Get actual user name
+          water_amount: 0, // TODO: Get actual water amount
+          water_datetime: new Date().toISOString(), // TODO: Get actual datetime
+          lat: e.lat,
+          lon: e.lon,
+        }));
+        setPins(pinData);
+      });
+    // setPins(markerDataSample);
+  }, [userId]);
 
   return (
     <View style={styles.container}>
@@ -68,9 +85,7 @@ export default function Map() {
             <MapPin pins={pins} setSelectedPin={setSelectedPin} />
           </MapView>
 
-          {selectedPin && (
-            <Mockup selectedPin={selectedPin} setSelectedPin={setSelectedPin} />
-          )}
+          {selectedPin && <Mockup selectedPin={selectedPin} setSelectedPin={setSelectedPin} />}
 
           {/* Floating Action Button */}
           <View style={styles.recordButton}>
@@ -118,10 +133,7 @@ export default function Map() {
                   <XGroup bordered height="$9" width="100%" gap="$2">
                     {/* お茶 */}
                     <RadioGroup.Item asChild value="tea" height={"100%"}>
-                      <Button
-                        flex={1}
-                        pressStyle={{ bg: "purple", scale: 0.98 }}
-                      >
+                      <Button flex={1} pressStyle={{ bg: "purple", scale: 0.98 }}>
                         <Coffee size={18} />
                         <Paragraph ml="$2">お茶</Paragraph>
                       </Button>
@@ -129,10 +141,7 @@ export default function Map() {
 
                     {/* 牛乳 */}
                     <RadioGroup.Item asChild value="milk" height={"100%"}>
-                      <Button
-                        flex={1}
-                        pressStyle={{ bg: "purple", scale: 0.98 }}
-                      >
+                      <Button flex={1} pressStyle={{ bg: "purple", scale: 0.98 }}>
                         <GlassWater size={18} />
                         <Paragraph ml="$2">牛乳</Paragraph>
                       </Button>

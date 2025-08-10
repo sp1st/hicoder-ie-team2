@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, StatusBar } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet, StatusBar } from "react-native";
 import {
   YStack,
   XStack,
@@ -10,59 +10,78 @@ import {
   Tabs,
   SizableText,
   // Separator,
-} from 'tamagui';
-import type { TabsContentProps } from 'tamagui';
-import { GlassWater } from '@tamagui/lucide-icons';
+} from "tamagui";
+import type { TabsContentProps } from "tamagui";
+import { GlassWater } from "@tamagui/lucide-icons";
+import { createUser, UserId } from "@/constants/api";
 
 interface HomeProps {
-  onLogin: () => void;
+  onLogin: (userId: UserId) => void;
 }
 
 export default function Home({ onLogin }: HomeProps) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [activeTab, setActiveTab] = useState('tab2');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [activeTab, setActiveTab] = useState("tab2");
 
-  console.log('Current activeTab:', activeTab);
+  console.log("Current activeTab:", activeTab);
+
+  const handleLogin = () => {
+    // TODO: ログインのチェック
+    // const userinfo = getUserInfo({});
+    const userId = 2; // apiから取得するように
+    onLogin(userId);
+  }
+  // TODO: ユーザー登録ロジック
+  const handleSignUp = () => {
+    // const userinfo = createUser({
+    //   user_id: 3,
+    //   user_name: username,
+    //   password_hash: password
+    // });
+    const userId = 2; // apiから取得するように
+    console.log("User registered:", {
+      user_id: userId,
+      user_name: username,
+      password_hash: password,
+    });
+    onLogin(userId);
+  };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#60A5FA" />
-      
+
       {/* メインコンテナ */}
       <YStack style={styles.mainContainer}>
-        
         {/* ロゴ部分 */}
         <YStack style={styles.logoContainer}>
           <View style={styles.logoWrapper}>
             <GlassWater size={60} color="#2563EB" />
           </View>
         </YStack>
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            orientation="horizontal"
-            flexDirection="column"
-            width="100%"
-            height={300}
-            overflow="hidden"
-            style={styles.tabsContainer}
-          >
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          orientation="horizontal"
+          flexDirection="column"
+          width="100%"
+          height={300}
+          overflow="hidden"
+          style={styles.tabsContainer}
+        >
           <YStack style={styles.tabsList}>
             <XStack>
               <Button
                 flex={1}
-                style={[
-                  styles.tabButton,
-                  activeTab === 'tab1' && styles.activeTabButton
-                ]}
-                onPress={() => setActiveTab('tab1')}
+                style={[styles.tabButton, activeTab === "tab1" && styles.activeTabButton]}
+                onPress={() => setActiveTab("tab1")}
               >
-                <SizableText 
-                  fontFamily="$body" 
+                <SizableText
+                  fontFamily="$body"
                   style={[
                     styles.tabTextCenter,
-                    activeTab === 'tab1' ? styles.activeTabText : styles.inactiveTabText
+                    activeTab === "tab1" ? styles.activeTabText : styles.inactiveTabText,
                   ]}
                 >
                   ログイン
@@ -70,17 +89,14 @@ export default function Home({ onLogin }: HomeProps) {
               </Button>
               <Button
                 flex={1}
-                style={[
-                  styles.tabButton,
-                  activeTab === 'tab2' && styles.activeTabButton
-                ]}
-                onPress={() => setActiveTab('tab2')}
+                style={[styles.tabButton, activeTab === "tab2" && styles.activeTabButton]}
+                onPress={() => setActiveTab("tab2")}
               >
-                <SizableText 
-                  fontFamily="$body" 
+                <SizableText
+                  fontFamily="$body"
                   style={[
                     styles.tabTextCenter,
-                    activeTab === 'tab2' ? styles.activeTabText : styles.inactiveTabText
+                    activeTab === "tab2" ? styles.activeTabText : styles.inactiveTabText,
                   ]}
                 >
                   アカウントを作成
@@ -106,19 +122,11 @@ export default function Home({ onLogin }: HomeProps) {
                 style={styles.inputField}
               />
 
-            <Text style={styles.forgotPasswordText}>
-              パスワードをお忘れですか？
-            </Text>
+              <Text style={styles.forgotPasswordText}>パスワードをお忘れですか？</Text>
 
-            <Button
-              style={styles.loginButton}
-              pressStyle={{ scale: 0.98 }}
-              onPress={onLogin}
-            >
-              <Text style={styles.loginButtonText}>
-                ログイン
-              </Text>
-            </Button>
+              <Button style={styles.loginButton} pressStyle={{ scale: 0.98 }} onPress={handleLogin}>
+                <Text style={styles.loginButtonText}>ログイン</Text>
+              </Button>
             </YStack>
           </TabsContent>
 
@@ -138,15 +146,13 @@ export default function Home({ onLogin }: HomeProps) {
                 style={styles.inputField}
               />
 
-            <Button
-              style={styles.loginButton}
-              pressStyle={{ scale: 0.98 }}
-              onPress={onLogin}
-            >
-              <Text style={styles.loginButtonText}>
-                アカウントを作成
-              </Text>
-            </Button>
+              <Button
+                style={styles.loginButton}
+                pressStyle={{ scale: 0.98 }}
+                onPress={handleSignUp}
+              >
+                <Text style={styles.loginButtonText}>アカウントを作成</Text>
+              </Button>
             </YStack>
           </TabsContent>
         </Tabs>
@@ -158,26 +164,26 @@ export default function Home({ onLogin }: HomeProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#a1d8e6', // blue-400
+    backgroundColor: "#a1d8e6", // blue-400
   },
   mainContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   logoContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 48,
   },
   logoWrapper: {
     width: 120,
     height: 120,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -185,93 +191,93 @@ const styles = StyleSheet.create({
   },
 
   contentCard: {
-    width: '100%',
+    width: "100%",
     maxWidth: 400,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     borderRadius: 24,
     padding: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 8,
   },
   formContainer: {
-    width: '100%',
+    width: "100%",
     padding: 16,
     marginBottom: 20,
     gap: 12,
   },
   inputField: {
-    backgroundColor: '#F9FAFB',
-    borderColor: '#D1D5DB',
+    backgroundColor: "#F9FAFB",
+    borderColor: "#D1D5DB",
     borderWidth: 1,
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
-    width: '100%',
+    width: "100%",
   },
   forgotPasswordText: {
     fontSize: 14,
-    color: '#6B7280',
-    textAlign: 'center',
+    color: "#6B7280",
+    textAlign: "center",
     marginBottom: 10,
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
   },
   loginButton: {
-    backgroundColor: '#38a1db',
+    backgroundColor: "#38a1db",
     borderRadius: 16,
     paddingVertical: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   },
   loginButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   tabsContainer: {
-    borderColor: '#E5E7EB',
+    borderColor: "#E5E7EB",
     borderRadius: 8,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 8,
   },
   tabsList: {
-    backgroundColor: '#82cddd',
+    backgroundColor: "#82cddd",
     borderRadius: 8,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
   },
   tabTextCenter: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   tabButton: {
-    backgroundColor: '#82cddd',
+    backgroundColor: "#82cddd",
     // borderRadius: 8,
     // paddingVertical: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   activeTabButton: {
-    backgroundColor: '#86b3e0',
+    backgroundColor: "#86b3e0",
   },
   activeTabText: {
-    color: 'white',
-    fontWeight: '600',
+    color: "white",
+    fontWeight: "600",
   },
   inactiveTabText: {
     // color: '#6B7280',
-    color: 'white',
-    fontWeight: '600',
+    color: "white",
+    fontWeight: "600",
   },
   tabContent: {
-    backgroundColor: '#86b3e0',
-    borderColor: '#86b3e0',
+    backgroundColor: "#86b3e0",
+    borderColor: "#86b3e0",
     borderRadius: 8,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
@@ -283,10 +289,10 @@ const TabsContent = (props: TabsContentProps) => {
   return (
     <Tabs.Content
       flex={1}
-      style={[styles.tabContent, { padding: 8, alignItems: 'center', justifyContent: 'center' }]}
+      style={[styles.tabContent, { padding: 8, alignItems: "center", justifyContent: "center" }]}
       {...props}
     >
       {props.children}
     </Tabs.Content>
-  )
-}
+  );
+};
