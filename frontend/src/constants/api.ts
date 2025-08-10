@@ -22,7 +22,7 @@ export const API_ENDPOINTS = {
   /** Get user information by ID */
   USER_INFO: (userId: UserId) => `${API_BASE_URL}/users/${userId}`,
   /** Get nearby users information */
-  NEAR_USERS_INFO: () => `${API_BASE_URL}/users/nearby`,
+  NEAR_USERS_INFO: (userId: UserId) => `${API_BASE_URL}/users/nearby/${userId}`,
   /** Get all water records for a user */
   WATER_RECORDS: (userId: UserId) => `${API_BASE_URL}/water_records/${userId}`,
   /** Get today's water records for a user */
@@ -318,6 +318,15 @@ const getUserInfo = async (userId: UserId): Promise<User> => {
 };
 
 /**
+ * Retrieves information about nearby users
+ * @param userId - The ID of the user to retrieve nearby users for
+ * @returns Promise resolving to array of nearby user data
+ */
+const getNearUsersInfo = async (userId: UserId): Promise<User[]> => {
+  return await api.get<User[]>(API_ENDPOINTS.NEAR_USERS_INFO(userId));
+};
+
+/**
  * Retrieves all water consumption records for a specific user
  * @param userId - The ID of the user whose records to retrieve
  * @returns Promise resolving to array of water records
@@ -417,5 +426,5 @@ export {
   createUser,
   createWaterRecord, getLatestWaterRecords, getStampInfo, getStamps, getStampsSentInfo, getTodayWaterRecords, getUserInfo,
   getWaterRecords, updateUserInfo,
-  updateWaterRecord
+  updateWaterRecord, getNearUsersInfo
 };
