@@ -35,7 +35,7 @@ export default function usePin() {
             message: latest.comment || undefined,
             iconUrl: user.photo_url || undefined,
             water_amount: latest.water_amount,
-            water_datetime: latest.water_date,
+            water_date: latest.water_date,
             lat: latest.lat,
             lon: latest.lon,
           } as MarkerData;

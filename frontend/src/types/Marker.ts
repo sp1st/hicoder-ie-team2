@@ -5,7 +5,7 @@ export type MarkerData = {
   user_name: string;
   iconUrl?: string;
   water_amount: number;
-  water_datetime: string;
+  water_date: string;
   lat: number;
   lon: number;
 };

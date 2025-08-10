@@ -29,7 +29,7 @@ function AppContainer() {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: "#0a7ea4ff",
+          tabBarActiveTintColor: "#007AFF",
           tabBarInactiveTintColor: "grey",
           tabBarLabelStyle: { paddingBottom: 10, fontSize: 10 },
           tabBarStyle: { padding: 10, height: 70 },

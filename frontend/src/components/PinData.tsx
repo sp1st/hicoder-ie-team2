@@ -1,6 +1,6 @@
 import type { MarkerData } from "@/types/Marker";
 
-export const markerDataSample: MarkerData[] = [
+export const markerData: MarkerData[] = [
   {
     id: 1,
     user_id: 101,
@@ -8,7 +8,7 @@ export const markerDataSample: MarkerData[] = [
     user_name: "せみ",
     iconUrl: "https://example.com/icons/user1.png",
     water_amount: 500,
-    water_datetime: "2025-08-09T08:15:00Z",
+    water_date: "2025-08-09T08:15:00Z",
     lat: 34.4013448,
     lon: 132.4549913,
   },
@@ -18,7 +18,7 @@ export const markerDataSample: MarkerData[] = [
     message: "お茶のんだよ",
     user_name: "ひな",
     water_amount: 1800,
-    water_datetime: "2025-08-09T10:45:00Z",
+    water_date: "2025-08-09T10:45:00Z",
     lat: 34.3956,
     lon: 132.4596,
   },
@@ -29,7 +29,7 @@ export const markerDataSample: MarkerData[] = [
     user_name: "ほげ",
     iconUrl: "https://example.com/icons/user3.png",
     water_amount: 700,
-    water_datetime: "2025-08-08T17:20:00Z",
+    water_date: "2025-08-08T17:20:00Z",
     lat: 34.4026,
     lon: 132.4594,
   },
@@ -39,7 +39,7 @@ export const markerDataSample: MarkerData[] = [
     message: "厳島神社参拝後にお水をいただきました",
     user_name: "ふが",
     water_amount: 600,
-    water_datetime: "2025-08-09T14:00:00Z",
+    water_date: "2025-08-09T14:00:00Z",
     lat: 34.2958,
     lon: 132.3197,
   },
@@ -49,7 +49,7 @@ export const markerDataSample: MarkerData[] = [
     message: "お好み焼きを食べた後の緑茶",
     user_name: "あべあ",
     water_amount: 250,
-    water_datetime: "2025-08-08T12:40:00Z",
+    water_date: "2025-08-08T12:40:00Z",
     lat: 34.3963,
     lon: 132.455,
   },
@@ -60,7 +60,7 @@ export const markerDataSample: MarkerData[] = [
     user_name: "ふー",
     iconUrl: "https://example.com/icons/user8.png",
     water_amount: 500,
-    water_datetime: "2025-08-09T19:30:00Z",
+    water_date: "2025-08-09T19:30:00Z",
     lat: 34.3961,
     lon: 132.4831,
   },
