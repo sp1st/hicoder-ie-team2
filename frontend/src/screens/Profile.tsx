@@ -24,7 +24,10 @@ export default function Profile() {
   const userId = useUserStore((state) => state.userId);
 
   useEffect(() => {
-    if (userId) getUserInfo(userId).then(setUserData);
+    if (userId) getUserInfo(userId).then((data) => {
+      setUserData(data);
+      setLoading(false);
+    });
   }, [userId]);
 
   return (
